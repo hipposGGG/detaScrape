@@ -4,7 +4,7 @@ Created on 2020/05/02
 @author: Takahashi Shuhei
 '''
 import unittest
-from calcurate.tashizan import tashizan
+from calculate.tashizan import tashizan
 
 class TestTashizan(unittest.TestCase):
     """test class of tashizan.py
