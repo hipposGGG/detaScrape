@@ -11,6 +11,8 @@ import os
 import argparse
 import sys
 import json
+import codecs
+
 
 # How To
 # (1) ソースコードを保存して命名する (e.g. scrape.py)
@@ -34,19 +36,30 @@ def main(args):
     query = args.search.split()
     query = '+'.join(query)
     max_images = args.num_images
+#     max_images = 10
 
     # 画像をフォルダーでグループする
     save_directory = args.directory + '/' + query
     if not os.path.exists(save_directory):
         os.makedirs(save_directory)
+#     save_directory = "D:\eclipse-workspace\python_test\scrape\cat"
+#     if not os.path.exists(save_directory):
+#         os.makedirs(save_directory)
 
-    # スクレーピング
-    url="https://www.google.co.jp/search?q="+query+"&source=lnms&tbm=isch"
-    header={'User-Agent':"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.134 Safari/537.36"}
+    # スクレーピング Chrome/43.0.2357.134
+    url="https://www.google.co.jp/search?q="+urllib.parse.quote(query)+"&source=lnms&tbm=isch"
+    header={'User-Agent':"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36"}
     soup = get_soup(url,header)
     ActualImages=[]
+#     print("★Fsoup:",Fsoup)
+#     soup = soupTmp.decode('utf-8')
+#     print("★soup:",soup)
+    soup = soup.decode('utf-8')
 
-    for a in soup.find_all("div",{"class":"rg_meta"}):
+#     for a in (soup.decode('utf-8')).find_all("div",{"class":"rg_meta"}):
+#     for a in soup.find_all("div",{"class_":"rg_meta"}):
+    for a in soup.find_all("div"):
+        print("★a:",a)
         link , Type =json.loads(a.text)["ou"]  ,json.loads(a.text)["ity"]
         ActualImages.append((link,Type))
     for i , (img , Type) in enumerate( ActualImages[0:max_images]):
